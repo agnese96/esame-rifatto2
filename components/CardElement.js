@@ -5,6 +5,7 @@ import { Card, CardItem, Text, H2, Left, Right, Badge } from 'native-base';
 export default class CardElement extends Component {
   render() {
     const { item } = this.props;
+    const img = this.props.item.img || require('../assets/icon.png');
     return (
       <Card style={styles.container} >
         <CardItem cardBody button onPress={this._press}>
