@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Constants } from 'expo';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, AsyncStorage } from 'react-native';
 import { Container, Header, Body, Title, Button, Right, Content, Text } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 const REMOTE_FAVORITES_URL ='http://www.dmi.unict.it/~calanducci/LAP2/favorities.json';
 import { createStackNavigator } from 'react-navigation';
-
 import ListComponent from '../components/ListComponent';
 import Details from '../screens/Details';
 
@@ -37,21 +36,32 @@ class PrivateFavorites extends Component {
       </Container>
     );
   }
-    getFavorites() {
-        this.getRemoteFavorites();
+    async getFavorites() {
+        try {
+            const value = await AsyncStorage.getItem('places');
+            if (value != null) {
+                console.log('trovato asyncstorage');
+                this.setState({list: JSON.parse(value), loading: false});
+            }
+            throw 'Places not found';
+          } catch (err) {
+            console.log(err);
+            this.getRemoteFavorites();
+          }
     }
 
     getRemoteFavorites = () => {
         fetch(REMOTE_FAVORITES_URL).then(response =>
           response.json().then(res => {
             this.setState({ list: res.data, loading: false });
-            //AsyncStorage.setItem('places', JSON.stringify(res.data));
+            AsyncStorage.setItem('places', JSON.stringify(res.data));
           })
         );
       };
     
     _details = (id) => {
-        const item = this.state.list.filter(item => item.id===id)
+        const item = this.state.list.find(item => item.id===id)
+        console.log('private',item);
         this.props.navigation.navigate('Details',{item});
     }
 }

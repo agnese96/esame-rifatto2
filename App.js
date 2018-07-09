@@ -4,13 +4,23 @@ import React, { Component } from 'react';
 import { Font } from 'expo';
 import Public from './tabs/Public';
 import Private from './tabs/Private';
-import { Spinner } from 'native-base'
+import { Spinner } from 'native-base';
+import * as firebase from 'firebase';
 
 export default class Home extends Component {
   state = {
     loading: true
   }
   async componentWillMount() {
+    let config = {
+      apiKey: 'AIzaSyClhlrX24AECRXdq1nZvhEGdwC7BHymnNQ',
+      authDomain: 'myfavorities-49de3.firebaseapp.com',
+      databaseURL: 'https://myfavorities-49de3.firebaseio.com',
+      projectId: 'myfavorities-49de3',
+      storageBucket: 'myfavorities-49de3.appspot.com',
+      messagingSenderId: '212535012908',
+    };
+    if (firebase.apps.length == 0) firebase.initializeApp(config);
     await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),

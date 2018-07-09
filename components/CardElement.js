@@ -15,21 +15,21 @@ export default class CardElement extends Component {
           <Text>{item.address}</Text>
         </CardItem>
         <CardItem cardBody style={styles.tags} button onPress={this._press}>
-          {item.tags.map(this.renderTag)}
+          {item.tags ? item.tags.map(this.renderTag): <Text>Nessun tag</Text>}
         </CardItem>
       </Card>
     );
   }
 
-  renderTag(tag) {
+  renderTag(tag, index) {
     return (
-      <Badge style={styles.tag} info>
+      <Badge style={styles.tag} info key={index}>
         <Text>{tag}</Text>
       </Badge>
     );
   }
   _press = () => {
-      this.props.onPress(this.props.item);
+      this.props.onPress(this.props.item.id);
   }
   
   
